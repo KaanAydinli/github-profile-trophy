@@ -1,13 +1,13 @@
-FROM denoland/deno:latest
+FROM denoland/deno:alpine
 
-# Create working directory
 WORKDIR /app
 
-# Copy source
 COPY . .
 
-# Compile the main app
+# Cache dependencies
 RUN deno cache main.ts
 
-# Run the app
+# Set V8 heap limit to 256MB (plenty for this app)
+ENV DENO_V8_FLAGS="--max-old-space-size=256"
+
 CMD ["deno", "run", "-A", "main.ts"]
